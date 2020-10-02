@@ -20,3 +20,18 @@ q = Q(book_like__user_id=request.user.id)
 ```
 на мой взгляд данный запрос выглядит ужасно!! Так-же я хотел бы добавить аннотацию к комментариям каждой книги is_liked
 которое которое равно True если данный коммент залайкан юзером request.user.id в противном случае False.
+Красивое решение первой задачи
+---
+```python
+subquery_1 = BookRate.objects.filter(book=OuterRef("pk"), user=request.user).values("rate")
+content = Book.objects.annotate(user_rate=Subquery(subquery_1))
+```
+Красивое решение всей задачи
+---
+```python
+subquery_1 = BookRate.objects.filter(book=OuterRef("pk"), user=request.user).values("rate")
+subquery_2 = CommentLike.objects.filter(comment=OuterRef("pk"), user=request.user)
+queryset = Comment.objects.annotate(isliked=Exists(subquery_2))
+prefetch = Prefetch("comment", queryset=queryset)
+content = Book.objects.annotate(user_rate=Subquery(subquery_1)).prefetch_related(prefetch)
+```
