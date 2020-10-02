@@ -1,6 +1,6 @@
 Мне хочется дастать query_set который содержит все книги и аннотировать им райтинг когторый им поставил пользователь с request.user.id.
 ``` python
-q = Q(book_like__user_id=request.user.id)
+q = Q(book_user__user=request.user)
 query_set = Book.objects.annotate(user_rate=Case(When(q, then=Cast("book_user__rate", CharField()))))
 ```
 но в таком случае дублируются книги, сколько юзеров в целом рэйтило эти книги - столько будет дублей.
