@@ -33,3 +33,5 @@ queryset = Comment.objects.annotate(isliked=Exists(subquery_2))
 prefetch = Prefetch("comment", queryset=queryset)
 content = Book.objects.annotate(user_rate=Subquery(subquery_1)).prefetch_related(prefetch)
 ```
+
+# Thenks Dmitry
