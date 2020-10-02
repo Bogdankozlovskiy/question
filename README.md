@@ -13,7 +13,7 @@ query_se = Book.objects.filter(q).annotate(user_rate=F("book_user__rate"))
 ```python
 q = Q(book_user__user=request.user)
 sub_query = Book.objects.filter(~q).annotate(user_rate=Value(0, CharField()))
-query = Book.objects.filter(q).annotate(user_rate=Cast("book_user__rate", CharField())).union(sub_query)
+query = Book.objects.filter(q).annotate(user_rate=F("book_user__rate")).union(sub_query)
 ```
 на мой взгляд данный запрос выглядит ужасно!! Так-же я хотел бы добавить аннотацию к комментариям каждой книги is_liked
 которое которое равно True если данный коммент залайкан юзером request.user.id в противном случае False.
