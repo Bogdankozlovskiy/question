@@ -5,7 +5,7 @@ query_set = Book.objects.annotate(user_rate=Case(When(q, then=Cast("book_like__r
 ```
 но в таком случае дублируются книги, сколько юзеров в целом рэйтило эти книги - столько будет дублей.
 тогда я (не без помощи) решил сделать фильтр
-```pytohn
+```python
 q = Q(book_like__user_id=request.user.id)
 query_se = Book.objects.filter(q).annotate(user_rate=Cast("book_like__rate", CharField()))
 ```
